@@ -33,12 +33,16 @@ dependencies {
 	// jpa
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+	// clients
+	implementation 'org.apache.httpcomponents:httpclient'
+
 	// starter-web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	// smart-things
+	// smartThings
 	implementation 'com.smartthings.sdk:smartapp-spring:0.0.4-PREVIEW'
 	implementation 'com.smartthings.sdk:smartapp-core:0.0.4-PREVIEW'
+	implementation 'com.smartthings.sdk:smartthings-client:0.0.4-PREVIEW'
 
 	// tester
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
