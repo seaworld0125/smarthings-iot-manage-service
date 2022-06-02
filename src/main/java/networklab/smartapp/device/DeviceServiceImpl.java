@@ -26,7 +26,7 @@ public class DeviceServiceImpl implements DeviceService {
     private String pat;
 
     @Override
-    public ResponseEntity<ResponseDto> getDeviceList() {
+    public List<Device> getDeviceList() {
         String requestUrl = DEVICE_LIST.getUrl();
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
@@ -44,13 +44,7 @@ public class DeviceServiceImpl implements DeviceService {
 
         DeviceListDto deviceListDto = responseEntity.getBody();
 
-        assert deviceListDto != null;
-        List<Device> devicesList = deviceListDto.getItems();
-
-        for(Device device : devicesList) {
-            System.out.println(device.getName());
-        }
-
-        return null;
+        assert deviceListDto != null : "deviceListDto items has null";
+        return deviceListDto.getItems();
     }
 }

@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
 
-    public ResponseEntity<ResponseDto> login(String password);
+    public boolean login(String password);
 }

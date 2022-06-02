@@ -28,6 +28,6 @@ public class DeviceListDto {
     }
 
     public List<Device> getItems() {
-        return items.subList(1, items.size() - 1);
+        return items.subList(1, items.size());
     }
 }

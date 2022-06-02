@@ -15,6 +15,7 @@ public enum SuccessCode {
     LOGOUT_SUCCESS("로그아웃 성공", 200),
     CHANGE_KEY_SUCCESS("비밀번호 변경 성공", 200),
 
+    GET_DEVICE_LIST_SUCCESS("디바이스 리스트 가져오기 성공", 200),
 
     ;
 
