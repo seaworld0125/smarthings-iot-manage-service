@@ -1,4 +1,4 @@
-package networklab.smartapp.response.error;
+package networklab.smartapp.error;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import networklab.smartapp.response.error.exception.ErrorCode;
+import networklab.smartapp.error.exception.ErrorCode;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 

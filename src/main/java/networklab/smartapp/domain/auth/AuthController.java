@@ -1,11 +1,9 @@
-package networklab.smartapp.auth;
+package networklab.smartapp.domain.auth;
 
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import networklab.smartapp.response.error.exception.BusinessException;
-import networklab.smartapp.response.error.exception.ErrorCode;
-import networklab.smartapp.response.success.ResponseDto;
-import networklab.smartapp.response.success.SuccessCode;
+import networklab.smartapp.error.exception.BusinessException;
+import networklab.smartapp.error.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,10 +18,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> auth(@RequestBody @Valid AuthDto authDto) {
+    public ResponseEntity auth(@RequestBody @Valid AuthDto authDto) {
         boolean result = authService.login(authDto.getPassword());
 
         if(!result) throw new BusinessException(ErrorCode.PASSWORD_INVALID);
-        return new ResponseEntity<>(HttpStatus.valueOf(SuccessCode.LOGIN_SUCCESS.getStatus()));
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

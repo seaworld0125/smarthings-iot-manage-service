@@ -1,4 +1,4 @@
-package networklab.smartapp.device;
+package networklab.smartapp.domain.device;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

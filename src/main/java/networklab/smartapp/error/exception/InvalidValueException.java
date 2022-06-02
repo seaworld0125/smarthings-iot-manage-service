@@ -1,4 +1,4 @@
-package networklab.smartapp.response.error.exception;
+package networklab.smartapp.error.exception;
 
 public class InvalidValueException extends BusinessException {
 

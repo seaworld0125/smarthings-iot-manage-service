@@ -1,6 +1,4 @@
-package networklab.smartapp.response.error.exception;
-
-import networklab.smartapp.response.error.exception.ErrorCode;
+package networklab.smartapp.error.exception;
 
 public class BusinessException extends RuntimeException {
 

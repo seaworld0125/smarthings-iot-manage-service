@@ -1,4 +1,4 @@
-package networklab.smartapp.auth;
+package networklab.smartapp.domain.auth;
 
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;

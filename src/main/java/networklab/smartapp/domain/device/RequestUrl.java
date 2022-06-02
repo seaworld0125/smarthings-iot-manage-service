@@ -1,4 +1,4 @@
-package networklab.smartapp.device;
+package networklab.smartapp.domain.device;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

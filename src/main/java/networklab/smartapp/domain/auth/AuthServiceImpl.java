@@ -1,4 +1,4 @@
-package networklab.smartapp.auth;
+package networklab.smartapp.domain.auth;
 
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;

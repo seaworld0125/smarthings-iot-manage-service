@@ -1,9 +1,9 @@
-package networklab.smartapp.response.error;
+package networklab.smartapp.error;
 
 import java.nio.file.AccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
-import networklab.smartapp.response.error.exception.BusinessException;
-import networklab.smartapp.response.error.exception.ErrorCode;
+import networklab.smartapp.error.exception.ErrorCode;
+import networklab.smartapp.error.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
