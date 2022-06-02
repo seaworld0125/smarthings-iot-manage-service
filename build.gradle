@@ -19,31 +19,20 @@ repositories {
 }
 
 dependencies {
-	// lombok
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// jackson
+	runtimeOnly 'mysql:mysql-connector-java'
+
+	implementation 'junit:junit'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'org.hibernate:hibernate-validator:6.1.0.Final'
+//	implementation 'org.springframework.session:spring-session-jdbc'
 
-	// redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-	// jpa
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-	// clients
-	implementation 'org.apache.httpcomponents:httpclient'
-
-	// starter-web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	// smartThings
-	implementation 'com.smartthings.sdk:smartapp-spring:0.0.4-PREVIEW'
-	implementation 'com.smartthings.sdk:smartapp-core:0.0.4-PREVIEW'
-	implementation 'com.smartthings.sdk:smartthings-client:0.0.4-PREVIEW'
-
-	// tester
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
