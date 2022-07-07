@@ -12,10 +12,12 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "C004", "서버 에러 : 서버 팀에 문의"),
     INVALID_TYPE_VALUE(400, "C005", "타입 오류입니다"),
     HANDLE_ACCESS_DENIED(403, "C006", "접근이 제한되었습니다"),
-    SERIAL_NUM_DUPLICATION(400, "C007", "이미 등록되어 있는 제품입니다"),
 
     // Member
-    PASSWORD_INVALID(401, "M003", "패스워드가 일치하지 않습니다"),
+    NOT_FOUND_MEMBER(401, "M001", "존재하지 않는 유저입니다"),
+    PASSWORD_INVALID(401, "M002", "패스워드가 일치하지 않습니다"),
+    OVERLAP_MEMBER(401, "M003", "이미 존재하는 유저입니다"),
+
 
     ;
     private final String code;
