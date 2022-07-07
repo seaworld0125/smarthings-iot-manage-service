@@ -1,6 +1,5 @@
-package networklab.smartapp.domain.auth;
+package networklab.smartapp.domain.dto;
 
-import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthDto {
 
-    @Size(min = 5, max = 20)
+    private String username;
+
     private String password;
 }
