@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./main-switch.css">
+    <link rel="stylesheet" type="text/css" href="./layout.css">
+    <title>Main Page</title>
+</head>
+<body>
+    <div class="title">
+        <p>장치 목록 페이지</p>
+    </div>
+    <select name="devices" class="device-select">
+        <option value="">표시할 장치 종류 선택</option>
+        <option value="all">전체 목록</option>
+        <option value="plug">플러그 목록</option>
+    </select>
+    <div class="device-status-box">
+        <div class="device-status" id="device-name">이름 : 다원 플러그</div>
+        <div class="device-status" id="device-location">위치 : 집 거실</div>
+        <div class="device-status" id="device-control">
+            전원
+            <input type="checkbox" id="switch">
+            <label for="switch" class="switch_label">
+                <span class="onf_btn"></span>
+            </label>
+        </div>
+    </div>
+</body>
+</html>

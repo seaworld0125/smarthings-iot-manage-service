@@ -1,0 +1,27 @@
+.join-form {
+    display: table;
+    width: 100%;
+}
+
+label, input {
+    display: table-row;
+    padding: 5px;
+}
+
+input:not(.join-button) {
+    width: 360px;
+    margin-top: 5px;
+    margin-bottom: 8px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0 0 2px 0;
+}
+
+input.join-button {
+    width: 370px;
+    margin-top: 10px;
+    background-color: black;
+
+    color: white;
+    font-size: medium;
+    font-weight: 500;
+}
