@@ -1,19 +1,53 @@
 package networklab.smartapp.domain.auth;
 
-import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import networklab.smartapp.domain.dto.AuthDto;
+import networklab.smartapp.domain.dto.JoinDto;
+import networklab.smartapp.domain.member.Member;
+import networklab.smartapp.domain.member.MemberRepository;
+import networklab.smartapp.error.exception.BusinessException;
+import networklab.smartapp.error.exception.ErrorCode;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Value("${user.password}")
-    private String password;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean login(String password) {
-        return Objects.equals(this.password, password);
+    public boolean authVerify(AuthDto authDto) throws BusinessException {
+
+        Optional<Member> optionalMember = memberRepository.findMemberByUsername(authDto.getUsername());
+        if(optionalMember.isEmpty()) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_MEMBER);
+        }
+
+        String memberPassword = optionalMember.get().getPassword();
+        if(!passwordEncoder.matches(authDto.getPassword(), memberPassword)) {
+            throw new BusinessException(ErrorCode.PASSWORD_INVALID);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean joinVerify(JoinDto joinDto) {
+
+        Optional<Member> optionalMember = memberRepository.findMemberByUsername(joinDto.getUsername());
+        if(optionalMember.isEmpty()) {
+            throw new BusinessException(ErrorCode.OVERLAP_MEMBER);
+        }
+
+        memberRepository.save(Member.builder()
+                    .PAT(joinDto.getPAT())
+                    .username(joinDto.getUsername())
+                    .password(passwordEncoder.encode(joinDto.getPassword()))
+                    .build());
+
+        return true;
     }
 }
