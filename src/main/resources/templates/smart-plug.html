@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./layout.css">
+    <link rel="stylesheet" type="text/css" href="./smart-plug.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Device Page</title>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script>
+        /*
+        그래프 레퍼런스
+        https://canvasjs.com/docs/charts/basics-of-creating-html5-chart/
+        */
+        window.onload = function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                exportEnabled: true,
+                backgroundColor: "rgba(255, 255, 255, 0)",
+                title:{
+                    text: "누적소비량 그래프",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    backgroundColor: "rgba(255, 255, 255, 0)",
+                },
+                toolbar:{
+                    itemBackgroundColor: "rgba(255, 255, 255, 0)",
+                },
+                axisY:{ 
+                    title: "kWh",
+                    labelAngle: 45,
+                    interval: .02,
+                    minimum: 0,
+                    // suffix: "%",
+                    valueFormatString: "#.00"
+                },
+                data: [{
+                    type: "stepLine",
+                    yValueFormatString: "#0.0\"%\"",
+                    xValueFormatString: "MMM YYYY",
+                    markerSize: 5,
+                    dataPoints: [
+                        { x: new Date(2022, 0, 13), y: 0.09 },
+                        { x: new Date(2022, 1, 14), y: 0.12 },
+                        { x: new Date(2022, 2, 20), y: 0.10 },
+                        { x: new Date(2022, 3, 05), y: 0.20, indexLabel: "Highest", indexLabelFontColor: "#C24642" },
+                        { x: new Date(2022, 4, 25), y: 0.15 },
+                        { x: new Date(2022, 5, 10), y: 0.12 },
+                        // { x: new Date(2016, 6), y: 0.09 },
+                        // { x: new Date(2016, 7), y: 0.09 },
+                        // { x: new Date(2016, 8), y: 0.09 },
+                        // { x: new Date(2016, 9), y: 0.09 },
+                        // { x: new Date(2016, 10), y: 0.09 },
+                        // { x: new Date(2016, 11), y: 0.09 },
+                        // { x: new Date(2017, 0), y: 0.09 },
+                        // { x: new Date(2017, 1), y: 0.09 },
+                        // { x: new Date(2017, 2), y: 0.09 },
+                        // { x: new Date(2017, 3), y: 0.09 },
+                        // { x: new Date(2017, 4), y: 0.09 },
+                        // { x: new Date(2017, 5), y: 0.09 }
+                    ]
+                }]
+            });
+            chart.render();
+        }
+        function myFunction() {
+            alert("test");
+        }
+    </script>
+</head>
+<body>
+    <button class="material-symbols-outlined" onclick="myFunction()">
+        home
+    </button>
+    <div class="title">
+        <p>스마트 플러그 상세 페이지</p>
+    </div>
+    <div class="current-status-box">
+        <div class="current-status-mini-box">
+            <p class="status-title">현재소비량</p>
+            <div class="status">30.6 W<br>0.00 kWh</div>
+        </div>
+        <div class="current-status-mini-box">
+            <p class="status-title">누적소비량</p>
+            <div class="status">150.6 W<br>0.01 kWh</div>
+        </div>
+        <div class="chart-mini-box">
+            <div id="chartContainer" style="width: 100%; height: 350px;"></div>
+        </div>
+    </div>
+</body>
+</html>
