@@ -2,7 +2,6 @@ package networklab.smartapp.domain.auth;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import networklab.smartapp.domain.dto.AuthDto;
 import networklab.smartapp.domain.dto.JoinDto;
 import networklab.smartapp.domain.member.Member;
 import networklab.smartapp.domain.member.MemberRepository;
@@ -19,15 +18,15 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean authVerify(AuthDto authDto) throws BusinessException {
+    public boolean authVerify(String username, String password) throws BusinessException {
 
-        Optional<Member> optionalMember = memberRepository.findMemberByUsername(authDto.getUsername());
+        Optional<Member> optionalMember = memberRepository.findMemberByUsername(username);
         if(optionalMember.isEmpty()) {
             throw new BusinessException(ErrorCode.NOT_FOUND_MEMBER);
         }
 
         String memberPassword = optionalMember.get().getPassword();
-        if(!passwordEncoder.matches(authDto.getPassword(), memberPassword)) {
+        if(!passwordEncoder.matches(password, memberPassword)) {
             throw new BusinessException(ErrorCode.PASSWORD_INVALID);
         }
 

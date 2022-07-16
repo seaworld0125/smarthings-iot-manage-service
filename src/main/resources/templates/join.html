@@ -6,8 +6,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="./join.css">
-    <link rel="stylesheet" type="text/css" href="./layout.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/join.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/layout.css">
     <title>Join Page</title>
 </head>
 <body>
@@ -15,27 +15,19 @@
         <p>가입하기</p>
     </div>
     <form action="localhost:8080/auth/join" method="post" class="join-form">
-        <div class="join-form">
-            <label for="pat">
-                smartthings PAT
-            </label>
-            <input type="text" name="pat" id="pat" required>
-        </div>
-        <div class="join-form">
-            <label for="username">
-                username
-            </label>
-            <input type="text" name="username" id="username" required>
-        </div>
-        <div class="join-form">
-            <label for="password">
-                password
-            </label>
-            <input type="text" name="password" id="password" required>
-        </div>
-        <div class="join-form">
-            <input type="submit" id="submit" value="가입하기" class="join-button">
-        </div>
+        <label for="pat">
+            smartthings PAT
+        </label>
+        <input type="text" name="pat" id="pat" required>
+        <label for="username">
+            username
+        </label>
+        <input type="text" name="username" id="username" required>
+        <label for="password">
+            password
+        </label>
+        <input type="text" name="password" id="password" required>
+        <input type="submit" id="submit" value="가입하기" class="join-button">
     </form>
 </body>
 </html>

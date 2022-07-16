@@ -6,6 +6,7 @@ import networklab.smartapp.error.exception.ErrorCode;
 import networklab.smartapp.error.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -74,10 +75,12 @@ public class GlobalExceptionHandler {
 //    ------------------------------------------    //
 
     @ExceptionHandler(BusinessException.class)
-    protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
+    protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e, Model model) {
         log.error("handleBusinessException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
+        model.addAttribute("errorMessage", errorCode.getMessage());
+
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
 

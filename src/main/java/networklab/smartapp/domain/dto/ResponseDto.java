@@ -1,5 +1,6 @@
 package networklab.smartapp.domain.dto;
 
+import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,14 @@ public class ResponseDto {
     public static ResponseDto of(String message) {
         return ResponseDto.builder()
                 .message(message)
+                .data(new ArrayList<>())
+                .build();
+    }
+
+    public static ResponseDto of(String message, Object data) {
+        return ResponseDto.builder()
+                .message(message)
+                .data(data)
                 .build();
     }
 }

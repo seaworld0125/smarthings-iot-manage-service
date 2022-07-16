@@ -1,0 +1,19 @@
+button {
+    width: 200px;
+    height: 25px;
+    border-radius: 3px;
+
+    margin: 10px auto;
+    display: block;
+    
+    background-color: white;
+}
+button:hover {
+    background-color: whitesmoke;
+}
+
+.message-box {
+    margin-bottom: 40px;
+    padding: 10px;
+    border: 1px solid black;
+}
