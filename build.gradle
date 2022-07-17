@@ -27,7 +27,6 @@ dependencies {
 	implementation 'junit:junit'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'org.hibernate:hibernate-validator:6.1.0.Final'
-//	implementation 'org.springframework.session:spring-session-jdbc'
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-devtools'
@@ -36,6 +35,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.session:spring-session-jdbc'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

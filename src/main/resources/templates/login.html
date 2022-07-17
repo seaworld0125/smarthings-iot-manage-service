@@ -6,15 +6,16 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="/css/auth.css">
+  <link rel="stylesheet" type="text/css" href="/css/login.css">
   <link rel="stylesheet" type="text/css" href="/css/layout.css">
-  <title>Auth Page</title>
+  <title>Login Page</title>
 </head>
 <body>
   <div class="title">
-    <p>로그인 페이지</p>
+    <p th:if="${error}">로그인 실패</p>
+    <p th:unless="${error}">로그인 페이지</p>
   </div>
-  <form action="http://localhost:8080/auth" method="post" class="login-form">
+  <form action="/auth/login" method="post" class="login-form">
     <label for="username">
       username
     </label>

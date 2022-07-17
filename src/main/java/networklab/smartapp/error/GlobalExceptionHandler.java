@@ -1,11 +1,13 @@
 package networklab.smartapp.error;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import networklab.smartapp.error.exception.ErrorCode;
 import networklab.smartapp.error.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -75,15 +77,27 @@ public class GlobalExceptionHandler {
 //    ------------------------------------------    //
 
     @ExceptionHandler(BusinessException.class)
-    protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e, Model model) {
+    protected String handleBusinessException(final BusinessException e, Model model) {
         log.error("handleBusinessException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
         model.addAttribute("errorMessage", errorCode.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
+        return "error";
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    protected String handleAuthenticationException(final AuthenticationException e, Model model) {
+        log.error("handleAuthenticationException", e);
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error";
+    }
+
+    @ExceptionHandler(IOException.class)
+    protected ResponseEntity<ErrorResponse> handleIOException(Exception e) {
+        log.error("handleIOException", e);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {

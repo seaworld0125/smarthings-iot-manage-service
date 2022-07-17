@@ -1,4 +1,4 @@
-package networklab.smartapp.config;
+package networklab.smartapp.domain.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

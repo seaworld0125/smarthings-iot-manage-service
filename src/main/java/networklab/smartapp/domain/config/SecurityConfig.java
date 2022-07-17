@@ -1,14 +1,15 @@
 package networklab.smartapp.domain.config;
 
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 /**
  * @author 태경 2022-07-07
@@ -17,43 +18,45 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final String[] freeRequestsUrl = {
-            "/auth"
-    };
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and()
+                .sessionManagement()
+                .invalidSessionUrl("/auth/invalid-session")
+                .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true)
+                    .expiredUrl("/auth/expired-session");
+
+        http
+                .formLogin()
+                    .loginPage("/auth/login")
+                    .defaultSuccessUrl("/main")
+                    .failureUrl("/auth/login?error=true")
+                    .permitAll()
+                    .and()
+                .logout()
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/auth/login");
+
+        http
                 .httpBasic().disable()
                 .csrf().disable()
-                .cors()
-                .and()
+                .cors();
+
+        http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
-                .anyRequest().permitAll(); // 개발 때문에 열어둠
-//                .antMatchers(freeRequestsUrl).permitAll()
-//                .anyRequest().hasAuthority(Authority.ROLE_USER);
+                .antMatchers("/auth/**", "/css/**", "/photo/**").permitAll()
+                .anyRequest().hasAuthority("ROLE_USER");
     }
-
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
-//        configuration.setAllowedOrigins(Arrays.asList("https://localhost:3000", "http://localhost:3000"));
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-//        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-//        configuration.setExposedHeaders(Arrays.asList("set-cookie"));
-//        configuration.setAllowCredentials(true);
-//        configuration.setMaxAge(3600L);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public static ServletListenerRegistrationBean httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
     }
 }

@@ -1,12 +1,9 @@
 package networklab.smartapp.domain.auth;
 
 import lombok.RequiredArgsConstructor;
-import networklab.smartapp.domain.dto.JoinDto;
-import networklab.smartapp.domain.dto.ResponseDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,30 +12,44 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping
-    public String getAuthPage() {
-        return "auth";
+    @GetMapping("/login")
+    public String getAuthPage(@RequestParam(value = "error", defaultValue = "false") boolean error, Model model) {
+
+        model.addAttribute("error", error);
+        return "login";
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public String auth(@RequestParam MultiValueMap<String,String> paramMap) {
-
-        authService.authVerify(paramMap.getFirst("username"), paramMap.getFirst("password"));
-        return "main";
-    }
+//    @PostMapping(value = "/login", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+//    public String auth(@RequestParam MultiValueMap<String,String> paramMap, HttpServletRequest request, HttpServletResponse response) {
+//
+//        if(!(paramMap.containsKey("username") || paramMap.containsKey("password"))) {
+//            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
+//        }
+//        authService.authVerify(paramMap.getFirst("username"), paramMap.getFirst("password"));
+//        HttpSession session = request.getSession(false);
+//
+//        session.setAttribute("username", paramMap.getFirst("username"));
+//        return "redirect:/main";
+//    }
 
     @GetMapping("/join")
     public String getJoinPage() { return "join"; }
 
-    @PostMapping("/join")
-    public ResponseEntity<ResponseDto> join(JoinDto joinDto) {
+    @PostMapping(value = "/join", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    public String join(@RequestParam MultiValueMap<String,String> paramMap) {
 
-        authService.joinVerify(joinDto);
-        return new ResponseEntity<>(ResponseDto.of("회원가입 성공"), HttpStatus.OK);
+        authService.joinVerify(paramMap.getFirst("pat"), paramMap.getFirst("username"), paramMap.getFirst("password"));
+        return "login";
     }
+
+    @GetMapping("/expired-session")
+    public String getExpiredSessionPage() { return "expired-session"; }
+
+    @GetMapping("/invalid-session")
+    public String getInvalidSessionPage() { return "invalid-session"; }
 }

@@ -3,7 +3,6 @@ package networklab.smartapp.domain.device;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import networklab.smartapp.domain.device.DeviceListDto.Device;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,15 +18,12 @@ public class DeviceServiceImpl implements DeviceService {
 
     private final RestTemplate restTemplate;
 
-    @Value("${user.pat}")
-    private String pat;
-
     @Override
     public List<Device> getDeviceList() {
         String requestUrl = RequestUrl.DEVICE_LIST.getUrl();
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add("Authorization", "Bearer " + pat);
+//        headers.add("Authorization", "Bearer " + pat);
 
         HttpHeaders httpHeaders = new HttpHeaders(headers);
         HttpEntity httpEntity = new HttpEntity(httpHeaders);

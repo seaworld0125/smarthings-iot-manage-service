@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/css/error.css">
+  <link rel="stylesheet" type="text/css" href="/css/layout.css">
+  <title>Expired-session Page</title>
+</head>
+<body>
+<div class="title">
+  <p>세션 만료 페이지</p>
+</div>
+<div class="message-box">
+  <p>세션이 만료되었습니다. 재로그인이 필요합니다.</p>
+</div>
+<div>
+  <button><a href="/auth/login">로그인 화면으로 이동</a></button>
+</div>
+</body>
+</html>

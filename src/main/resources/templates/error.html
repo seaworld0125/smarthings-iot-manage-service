@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/css/error.css">
   <link rel="stylesheet" type="text/css" href="/css/layout.css">
-  <title>Auth Page</title>
+  <title>Error Page</title>
 </head>
 <body>
   <div class="title">
@@ -16,12 +16,12 @@
   </div>
   <div class="message-box">
     <p>[에러 메시지]</p>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla fuga illo, adipisicing elit. Nulla fuga illo, officia repellat provident odit praesentium suscipit doloremque </p>
+    <p th:text="${errorMessage}">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla fuga illo, adipisicing elit. Nulla fuga illo, officia repellat provident odit praesentium suscipit doloremque </p>
   </div>
   <div>
-    <button>로그인 화면으로 이동</button>
-    <button>회원가입 화면으로 이동</button>
-    <button>메인 화면으로 이동</button>
+    <button><a href="http://localhost:8080/auth/login">로그인 화면으로 이동</a></button>
+    <button><a href="http://localhost:8080/auth/join">회원가입 화면으로 이동</a></button>
+    <button><a href="http://localhost:8080/main">메인 화면으로 이동</a></button>
   </div>
 </body>
 </html>
