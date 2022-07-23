@@ -18,24 +18,17 @@ public class AuthController {
     private final AuthService authService;
 
     @GetMapping("/login")
-    public String getAuthPage(@RequestParam(value = "error", defaultValue = "false") boolean error, Model model) {
-
-        model.addAttribute("error", error);
+    public String getAuthPage(
+            @RequestParam(value = "error", required = false, defaultValue = "false") boolean error,
+            @RequestParam(value = "exception", required = false) String exception,
+            Model model
+    ) {
+        if(error) {
+            model.addAttribute("error", error);
+            model.addAttribute("errorMessage", exception);
+        }
         return "login";
     }
-
-//    @PostMapping(value = "/login", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-//    public String auth(@RequestParam MultiValueMap<String,String> paramMap, HttpServletRequest request, HttpServletResponse response) {
-//
-//        if(!(paramMap.containsKey("username") || paramMap.containsKey("password"))) {
-//            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
-//        }
-//        authService.authVerify(paramMap.getFirst("username"), paramMap.getFirst("password"));
-//        HttpSession session = request.getSession(false);
-//
-//        session.setAttribute("username", paramMap.getFirst("username"));
-//        return "redirect:/main";
-//    }
 
     @GetMapping("/join")
     public String getJoinPage() { return "join"; }

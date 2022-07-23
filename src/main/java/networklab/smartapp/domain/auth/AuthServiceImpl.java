@@ -24,8 +24,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void authVerify(String username, String password) throws BusinessException {
 
-//        password = passwordEncoder.encode(password); // 내가 할 필요 없다
-
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
