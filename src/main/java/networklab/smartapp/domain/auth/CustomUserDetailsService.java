@@ -3,7 +3,6 @@ package networklab.smartapp.domain.auth;
 import lombok.RequiredArgsConstructor;
 import networklab.smartapp.domain.member.Member;
 import networklab.smartapp.domain.member.MemberRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,10 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         Member member = memberRepository.findMemberByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("가입되지 않은 username"));
 
-        return User.builder()
-                .username(member.getUsername())
-                .password(member.getPassword())
-                .authorities("ROLE_USER")
-                .build();
+        return new CustomUserDetails(member);
     }
 }

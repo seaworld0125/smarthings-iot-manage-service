@@ -5,15 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class DeviceListDto {
 
     private List<Device> items;
 
     @Getter
+    @ToString
     public static class Device {
         private String deviceId;
         private String name;

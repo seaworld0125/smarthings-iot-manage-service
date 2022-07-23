@@ -1,5 +1,6 @@
 package networklab.smartapp.domain.device;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import networklab.smartapp.domain.device.DeviceListDto.Device;
@@ -19,11 +20,11 @@ public class DeviceServiceImpl implements DeviceService {
     private final RestTemplate restTemplate;
 
     @Override
-    public List<Device> getDeviceList() {
+    public List<Device> getDeviceList(String pat) {
         String requestUrl = RequestUrl.DEVICE_LIST.getUrl();
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-//        headers.add("Authorization", "Bearer " + pat);
+        headers.add("Authorization", "Bearer " + pat);
 
         HttpHeaders httpHeaders = new HttpHeaders(headers);
         HttpEntity httpEntity = new HttpEntity(httpHeaders);
@@ -36,8 +37,6 @@ public class DeviceServiceImpl implements DeviceService {
                 );
 
         DeviceListDto deviceListDto = responseEntity.getBody();
-
-        assert deviceListDto != null : "deviceListDto items has null";
-        return deviceListDto.getItems();
+        return deviceListDto != null ? deviceListDto.getItems() : new ArrayList<Device>();
     }
 }

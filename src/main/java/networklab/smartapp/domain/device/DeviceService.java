@@ -5,5 +5,5 @@ import networklab.smartapp.domain.device.DeviceListDto.Device;
 
 public interface DeviceService {
 
-    public List<Device> getDeviceList();
+    public List<Device> getDeviceList(String pat);
 }
