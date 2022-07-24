@@ -11,4 +11,8 @@ public enum RequestUrl {
     DEVICE_LIST("https://api.smartthings.com/v1/devices"),
     ;
     private final String url;
+
+    public static String getDeviceSwitchStatusUrl(String deviceId) {
+        return "https://api.smartthings.com/v1/devices/" + deviceId + "/components/main/capabilities/switch/status";
+    }
 }

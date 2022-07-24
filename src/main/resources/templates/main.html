@@ -8,12 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/main-switch.css">
     <link rel="stylesheet" type="text/css" href="/css/layout.css">
+    <!-- <link rel="stylesheet" type="text/css" href="./main-switch.css">
+    <link rel="stylesheet" type="text/css" href="./layout.css"> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Main Page</title>
 </head>
 <body>
     <a href="/logout">
-        <button class="material-symbols-outlined">
+        <button class="material-symbols-outlined logout-icon">
             logout
         </button>
     </a>
@@ -25,16 +27,26 @@
         <option value="all">전체 목록</option>
         <option value="plug">플러그 목록</option>
     </select>
-    <div class="device-status-box">
-        <div class="device-status" id="device-name">이름 : 다원 플러그</div>
-        <div class="device-status" id="device-location">위치 : 집 거실</div>
-        <div class="device-status" id="device-control">
-            전원
-            <input type="checkbox" id="switch">
-            <label for="switch" class="switch_label">
-                <span class="onf_btn"></span>
-            </label>
+    <div class="device-status-box" th:each="device : ${deviceList}">
+        <div class="device-control-box">
+            <div class="material-symbols-outlined plug-icon">
+                outlet
+            </div>
+            <div class="device-control">
+                <div class="material-symbols-outlined power-icon">
+                    power_rounded
+                </div>
+            </div>
         </div>
+        <div class="device-info-box">
+            <div class="device-label" id="device-name" th:text="${device.getLabel()}">라벨</div>
+            <div class="device-power" th:text="${device.getSwitchValue()}">켜짐/꺼짐</div>
+        </div>
+        <a th:href="@{/main/detail/{deviceId}(deviceId = ${device.getDeviceId()})}">
+            <div class="material-symbols-outlined info-icon">
+                info
+            </div>
+        </a>
     </div>
 </body>
 </html>

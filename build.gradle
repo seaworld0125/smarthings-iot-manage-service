@@ -27,6 +27,7 @@ dependencies {
 	implementation 'junit:junit'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'org.hibernate:hibernate-validator:6.1.0.Final'
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-devtools'
