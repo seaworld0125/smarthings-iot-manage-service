@@ -25,3 +25,8 @@ input.join-button {
     font-size: medium;
     font-weight: 500;
 }
+
+div.announcement-box {
+    margin-top: 35px;
+    font-weight: 540;
+}

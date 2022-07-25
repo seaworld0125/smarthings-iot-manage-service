@@ -8,12 +8,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/main-switch.css">
     <link rel="stylesheet" type="text/css" href="/css/layout.css">
-    <!-- <link rel="stylesheet" type="text/css" href="./main-switch.css">
-    <link rel="stylesheet" type="text/css" href="./layout.css"> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Main Page</title>
 </head>
 <body>
+    <script th:inline="javascript">
+        /* <![CDATA[ */
+            onOffFunction = function (switchValue, deviceId) {
+                var reqUrl = `https://api.smartthings.com/v1/devices/${deviceId}/commands`;
+                var headers = {
+                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'Authorization' : 'Bearer ' + /*[[${pat}]]*/ "",
+                }
+                var data = {
+                    "commands" : [{"capability":"switch","command": (switchValue === "on" ? "off" : "on")}]
+                };
+                axios.post(reqUrl, data, {
+                    headers: headers
+                })
+                .then((res) => {
+                    console.log("res: ", res);
+                    window.location.reload();
+                })
+            }
+        /* ]]> */
+    </script>
     <a href="/logout">
         <button class="material-symbols-outlined logout-icon">
             logout
@@ -32,7 +52,7 @@
             <div class="material-symbols-outlined plug-icon">
                 outlet
             </div>
-            <div class="device-control">
+            <div class="device-control" th:attr="onclick=|onOffFunction('${device.getSwitchValue()}', '${device.getDeviceId()}')|">
                 <div class="material-symbols-outlined power-icon">
                     power_rounded
                 </div>

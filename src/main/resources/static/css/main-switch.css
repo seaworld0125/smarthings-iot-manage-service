@@ -37,7 +37,6 @@ div.device-info-box {
     height: 50%;
     width: 83%;
     float: left;
-    overflow-x: hidden;
 }
 div.device-label {
     font-size: medium;

@@ -15,4 +15,8 @@ public enum RequestUrl {
     public static String getDeviceSwitchStatusUrl(String deviceId) {
         return "https://api.smartthings.com/v1/devices/" + deviceId + "/components/main/capabilities/switch/status";
     }
+
+    public static String getDeviceEnergyConsumptionStatus(String deviceId) {
+        return "https://api.smartthings.com/v1/devices/" + deviceId + "/components/main/status";
+    }
 }
