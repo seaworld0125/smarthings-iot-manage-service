@@ -86,9 +86,9 @@ public class DeviceController {
 //        cell.setCellValue("test");
         // or do it one line
          row.createCell(0).setCellValue("date");
-//         row.createCell(1).setCellValue("time");
-//         row.createCell(2).setCellValue("kWh");
-//         row.createCell(3).setCellValue("device-type");
+         row.createCell(1).setCellValue("time");
+         row.createCell(2).setCellValue("kWh");
+         row.createCell(3).setCellValue("device-type");
 
         // 파일명 설정
         Date date = new Date();
