@@ -38,5 +38,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.session:spring-session-jdbc'
 
+	implementation 'org.apache.poi:poi:4.1.2'
+	implementation 'org.apache.poi:poi-ooxml:4.1.2'
+	implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
+	implementation 'org.apache.commons:commons-compress:1.19'
+	implementation 'com.github.virtuald:curvesapi:1.06'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
