@@ -1,15 +1,16 @@
 package networklab.smartapp.domain.device.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -24,18 +25,18 @@ import lombok.ToString.Exclude;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-public class Device {
+public class HourEnergyData {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "device")
-    @Default
+    @ManyToOne
     @Exclude
-    Set<DailyEnergyData> dailyEnergyDataSet = new HashSet<>();
+    private Device device;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "device")
-    @Default
-    @Exclude
-    Set<HourEnergyData> hourEnergyDataSet = new HashSet<>();
+    @Temporal(TemporalType.DATE)
+    private Date regDate;
+
+    Double energyConsumption;
 }

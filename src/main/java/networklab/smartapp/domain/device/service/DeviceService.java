@@ -7,5 +7,9 @@ import networklab.smartapp.domain.device.entity.Device;
  */
 public interface DeviceService {
 
-    Device findDeviceEntity(String id);
+    public Device findDeviceEntityWithDailyEnergyData(String id);
+
+    public Device findDeviceEntityWithHourEnergyData(String id);
+
+    public Device findById(String id);
 }

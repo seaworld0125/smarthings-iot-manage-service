@@ -16,8 +16,32 @@ public class DeviceServiceImpl implements DeviceService {
     private final DeviceRepository deviceRepository;
 
     @Override
-    public Device findDeviceEntity(String id) {
-        Optional<Device> deviceOptional = deviceRepository.getDeviceByIdWithFetchJoin(id);
+    public Device findDeviceEntityWithDailyEnergyData(String id) {
+        Optional<Device> deviceOptional = deviceRepository.getDeviceByIdWithDailyEnergyData(id);
+        if(deviceOptional.isEmpty()) {
+            return deviceRepository.save(Device.builder()
+                    .id(id)
+                    .build()
+            );
+        }
+        return deviceOptional.get();
+    }
+
+    @Override
+    public Device findDeviceEntityWithHourEnergyData(String id) {
+        Optional<Device> deviceOptional = deviceRepository.getDeviceByIdWithHourEnergyData(id);
+        if(deviceOptional.isEmpty()) {
+            return deviceRepository.save(Device.builder()
+                    .id(id)
+                    .build()
+            );
+        }
+        return deviceOptional.get();
+    }
+
+    @Override
+    public Device findById(String id) {
+        Optional<Device> deviceOptional = deviceRepository.findById(id);
         if(deviceOptional.isEmpty()) {
             return deviceRepository.save(Device.builder()
                     .id(id)

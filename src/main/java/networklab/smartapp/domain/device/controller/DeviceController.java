@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import networklab.smartapp.domain.device.dto.DeviceListDto.DeviceInfo;
 import networklab.smartapp.domain.device.dto.EnergyDataDto;
 import networklab.smartapp.domain.device.dto.SmartPlugDetailDto;
 import networklab.smartapp.domain.device.entity.Device;
+import networklab.smartapp.domain.device.entity.DailyEnergyData;
 import networklab.smartapp.domain.device.service.DeviceInfoService;
 import networklab.smartapp.domain.device.service.DeviceService;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -58,10 +60,11 @@ public class DeviceController {
             Model model
     ) {
         SmartPlugDetailDto smartPlugDetailDto = deviceInfoService.getDeviceEnergyConsumptionStatus(userDetails.getPat(), deviceId);
-        Device device = deviceService.findDeviceEntity(deviceId);
-        List<EnergyDataDto> energyDataDtoList = device.getEnergyDataSet()
+        Device device = deviceService.findDeviceEntityWithDailyEnergyData(deviceId);
+        List<EnergyDataDto> energyDataDtoList = device.getDailyEnergyDataSet()
                         .stream()
-                        .sorted((e1, e2) -> e2.getRegDate().compareTo(e1.getRegDate()))
+                        .sorted(Comparator.comparing(DailyEnergyData::getRegDate))
+                        .limit(14)
                         .map(EnergyDataDto::dataToDto)
                         .collect(Collectors.toList());
 
@@ -147,6 +150,7 @@ public class DeviceController {
         // 파일 생성 : OutputStream을 얻어 생성한 엑셀 write
         OutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
+        outputStream.flush();
         outputStream.close();
 
         return new ResponseEntity<String>(new String("ok"), HttpStatus.OK);
