@@ -13,10 +13,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, String> {
 
-    @Query("select distinct d from Device as d join fetch d.dailyEnergyDataSet where d.id = :id")
+    @Query("select distinct d from Device as d left join fetch d.dailyEnergyDataSet where d.id = :id")
     Optional<Device> getDeviceByIdWithDailyEnergyData(@Param("id") String id);
 
-    @Query("select distinct d from Device as d join fetch d.hourEnergyDataSet where d.id = :id")
+    @Query("select distinct d from Device as d left join fetch d.hourEnergyDataSet where d.id = :id")
     Optional<Device> getDeviceByIdWithHourEnergyData(@Param("id") String id);
 
     Optional<Device> findById(String id);

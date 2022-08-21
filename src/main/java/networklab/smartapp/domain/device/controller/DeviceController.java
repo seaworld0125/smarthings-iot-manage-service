@@ -74,9 +74,19 @@ public class DeviceController {
         return "smart-plug";
     }
 
-    @GetMapping("/excel")
-    public ResponseEntity<String> getExcelfile(HttpServletRequest request, HttpServletResponse response)
+    @GetMapping("/excel/{deviceId}")
+    public ResponseEntity<String> getExcelfile(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable(value = "deviceId") String deviceId,
+            HttpServletRequest request,
+            HttpServletResponse response
+    )
             throws IOException {
+
+        // get Device
+        Device device = deviceService.findById(deviceId);
+
+
         // new workbook
         SXSSFWorkbook workbook = new SXSSFWorkbook();
         CreationHelper createHelper = workbook.getCreationHelper();

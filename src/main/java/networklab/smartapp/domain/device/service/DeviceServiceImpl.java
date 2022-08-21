@@ -1,9 +1,13 @@
 package networklab.smartapp.domain.device.service;
 
 import java.util.Optional;
+import java.util.stream.Stream;
+
 import lombok.RequiredArgsConstructor;
 import networklab.smartapp.domain.device.entity.Device;
+import networklab.smartapp.domain.device.entity.HourEnergyData;
 import networklab.smartapp.domain.device.repository.DeviceRepository;
+import networklab.smartapp.domain.device.repository.HourEnergyDataRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class DeviceServiceImpl implements DeviceService {
 
     private final DeviceRepository deviceRepository;
+    private final HourEnergyDataRepository hourEnergyDataRepository;
 
     @Override
     public Device findDeviceEntityWithDailyEnergyData(String id) {
@@ -49,5 +54,13 @@ public class DeviceServiceImpl implements DeviceService {
             );
         }
         return deviceOptional.get();
+    }
+
+    @Override
+    public Stream<HourEnergyData> getHourEnergyDataStreamByDeviceId(String id) {
+        Device device = findById(id);
+        hourEnergyDataRepository.findAllByDeviceUsingStream(device);
+
+        return null;
     }
 }

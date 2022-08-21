@@ -108,11 +108,10 @@ public class DeviceInfoServiceImpl implements DeviceInfoService {
             String currentConsumption = power.get("value").toString() + power.get("unit").toString();
             String dailyConsumption = energy.get("value").toString() + energy.get("unit").toString();
 
-            return new SmartPlugDetailDto(currentConsumption, dailyConsumption);
-
+            return new SmartPlugDetailDto(deviceId, currentConsumption, dailyConsumption);
         } catch (ParseException parseException) {
             log.warn(parseException.getMessage());
         }
-        return new SmartPlugDetailDto("error", "error");
+        return new SmartPlugDetailDto(deviceId, "error", "error");
     }
 }

@@ -16,6 +16,8 @@ import lombok.ToString;
 @ToString
 public class SmartPlugDetailDto {
 
+    private String deviceId;
+
     private String currentConsumption;
 
     private String dailyConsumption;
