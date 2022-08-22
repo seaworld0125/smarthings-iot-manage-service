@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Device Page</title>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script th:inline="javascript">
         /*
         그래프 레퍼런스
@@ -20,9 +21,9 @@
         window.onload = function () {
             var energyDataList = [];
             /*[# th:each="dto : ${energyDataDtoList}"]*/
-                var date = /*[[${dto.getDate()}]]*/ "";
-                var consumption = /*[[${dto.getEnergyConsumption()}]]*/ 1.0;
-                energyDataList.push({ x: new Date(date), y: consumption });
+            var date = /*[[${dto.getDate()}]]*/ "";
+            var consumption = /*[[${dto.getEnergyConsumption()}]]*/ 1.0;
+            energyDataList.push({ x: new Date(date), y: consumption });
             /*[/]*/
             console.log(energyDataList);
             var chart = new CanvasJS.Chart("chartContainer", {
@@ -38,7 +39,7 @@
                 toolbar:{
                     itemBackgroundColor: "rgba(255, 255, 255, 0)",
                 },
-                axisY:{ 
+                axisY:{
                     title: "kWh",
                     labelAngle: 45,
                     interval: 1,
@@ -57,30 +58,70 @@
             });
             chart.render();
         }
+
+        function getExcel() {
+            var id = /*[[${plugDetail.getDeviceId()}]]*/ "";
+            var contentType = 'blob';
+            var date = document.getElementById("start-date").value;
+            // var contentType = "application/download;charset=utf-8";
+            // const agent = window.navigator.userAgent.toLocaleLowerCase();
+            // switch(agent) {
+            //     case agent.indexOf("firefox") > -1:
+            //     case agent.indexOf("opera") > -1:
+            //         contentType = "application/octet-stream; text/html; charset=UTF-8;";
+            //         break;
+            //     default: // MSIE, Trident, Chrome, ..
+            //         contentType = "application/x-msdownload; text/html; charset=UTF-8;";
+            //         break;
+            // }
+            axios({
+                url: "/main/excel/" + id + "/" + date,
+                method: 'GET',
+                withCredentials: true,
+                responseType: contentType
+            })
+                .then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'consumptionData.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+                })
+        }
         /* ]]> */
     </script>
 </head>
 <body>
-    <a href="/main">
-        <button class="material-symbols-outlined">
-            home
-        </button>
-    </a>
-    <div class="title">
-        <p>스마트 플러그 상세 페이지</p>
+<a href="/main">
+    <button class="material-symbols-outlined">
+        home
+    </button>
+</a>
+<div class="title">
+    <p>스마트 플러그 상세 페이지</p>
+</div>
+<div class="current-status-box">
+    <div class="current-status-mini-box">
+        <p class="status-title">현재소비량</p>
+        <p class="status" th:text="${plugDetail.getCurrentConsumption()}">00.0 W</p>
     </div>
-    <div class="current-status-box">
-        <div class="current-status-mini-box">
-            <p class="status-title">현재소비량</p>
-            <p class="status" th:text="${plugDetail.getCurrentConsumption()}">00.0 W</p>
-        </div>
-        <div class="current-status-mini-box">
-            <p class="status-title">당일 누적소비량</p>
-            <p class="status" th:text="${plugDetail.getDailyConsumption()}">0.000 kWh</p>
-        </div>
-        <div class="chart-mini-box">
-            <div id="chartContainer" style="width: 100%; height: 350px;"></div>
-        </div>
+    <div class="current-status-mini-box">
+        <p class="status-title">당일 누적소비량</p>
+        <p class="status" th:text="${plugDetail.getDailyConsumption()}">0.000 kWh</p>
     </div>
+    <div class="chart-mini-box">
+        <div id="chartContainer" style="width: 100%; height: 350px;"></div>
+    </div>
+    <form onsubmit="return false;" style="width: 100%;">
+        <p style="font-weight: 600;">엑셀 다운로드하기</p>
+        <p style="font-size: small; font-weight: 600;">
+            설정한 시점부터 현재까지 누적된 데이터를 다운로드합니다.
+        </p>
+        <p style="font-weight: 600;"><input type="datetime-local" id="start-date"></p>
+        <button type="submit" id="excel-btn" onclick="getExcel()">Excel 다운로드</button>
+<!--        <button type="submit" id="excel-btn" onclick="getExcel()">Excel 다운로드</button>-->
+    </form>
+</div>
 </body>
 </html>

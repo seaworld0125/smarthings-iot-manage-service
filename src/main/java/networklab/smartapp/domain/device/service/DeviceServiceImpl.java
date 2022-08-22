@@ -1,13 +1,13 @@
 package networklab.smartapp.domain.device.service;
 
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
-import networklab.smartapp.domain.device.entity.Device;
-import networklab.smartapp.domain.device.entity.HourEnergyData;
-import networklab.smartapp.domain.device.repository.DeviceRepository;
+import networklab.smartapp.domain.device.dto.EnergyDataDto;
+import networklab.smartapp.domain.device.repository.DailyEnergyDataRepository;
 import networklab.smartapp.domain.device.repository.HourEnergyDataRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,50 +17,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeviceServiceImpl implements DeviceService {
 
-    private final DeviceRepository deviceRepository;
     private final HourEnergyDataRepository hourEnergyDataRepository;
+    private final DailyEnergyDataRepository dailyEnergyDataRepository;
 
     @Override
-    public Device findDeviceEntityWithDailyEnergyData(String id) {
-        Optional<Device> deviceOptional = deviceRepository.getDeviceByIdWithDailyEnergyData(id);
-        if(deviceOptional.isEmpty()) {
-            return deviceRepository.save(Device.builder()
-                    .id(id)
-                    .build()
-            );
-        }
-        return deviceOptional.get();
-    }
-
-    @Override
-    public Device findDeviceEntityWithHourEnergyData(String id) {
-        Optional<Device> deviceOptional = deviceRepository.getDeviceByIdWithHourEnergyData(id);
-        if(deviceOptional.isEmpty()) {
-            return deviceRepository.save(Device.builder()
-                    .id(id)
-                    .build()
-            );
-        }
-        return deviceOptional.get();
-    }
-
-    @Override
-    public Device findById(String id) {
-        Optional<Device> deviceOptional = deviceRepository.findById(id);
-        if(deviceOptional.isEmpty()) {
-            return deviceRepository.save(Device.builder()
-                    .id(id)
-                    .build()
-            );
-        }
-        return deviceOptional.get();
-    }
-
-    @Override
-    public Stream<HourEnergyData> getHourEnergyDataStreamByDeviceId(String id) {
-        Device device = findById(id);
-        hourEnergyDataRepository.findAllByDeviceUsingStream(device);
-
-        return null;
+    public List<EnergyDataDto> findDailyEnergyData(String deviceId) {
+        return dailyEnergyDataRepository.findAllByDeviceId(deviceId, PageRequest.of(0, 14))
+                .stream()
+                .map(EnergyDataDto::dataToDto)
+                .collect(Collectors.toList());
     }
 }

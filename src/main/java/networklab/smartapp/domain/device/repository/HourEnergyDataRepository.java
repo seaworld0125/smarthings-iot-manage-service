@@ -1,11 +1,12 @@
 package networklab.smartapp.domain.device.repository;
 
-import io.lettuce.core.dynamic.annotation.Param;
-import networklab.smartapp.domain.device.entity.Device;
 import networklab.smartapp.domain.device.entity.HourEnergyData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -13,6 +14,9 @@ import java.util.stream.Stream;
  */
 public interface HourEnergyDataRepository extends JpaRepository<HourEnergyData, Long> {
 
-    @Query("select h from HourEnergyData h where h.device = :device and h.regDate")
-    Stream<HourEnergyData> findAllByDeviceUsingStream(@Param("device") Device device);
+    @Query("select h from HourEnergyData h where h.deviceId = :deviceId and h.regDate >= :date order by h.regDate desc")
+    Stream<HourEnergyData> findAllByDeviceIdAndDateUsingStream(@Param("deviceId") String deviceId, @Param("date") LocalDateTime date);
+
+    @Query("select h from HourEnergyData h where h.deviceId = :deviceId and h.regDate = :date")
+    Optional<HourEnergyData> findLast(@Param("deviceId") String deviceId, @Param("date") LocalDateTime date);
 }

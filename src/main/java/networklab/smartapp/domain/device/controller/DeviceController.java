@@ -3,11 +3,9 @@ package networklab.smartapp.domain.device.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +13,9 @@ import networklab.smartapp.domain.auth.CustomUserDetails;
 import networklab.smartapp.domain.device.dto.DeviceListDto.DeviceInfo;
 import networklab.smartapp.domain.device.dto.EnergyDataDto;
 import networklab.smartapp.domain.device.dto.SmartPlugDetailDto;
-import networklab.smartapp.domain.device.entity.Device;
-import networklab.smartapp.domain.device.entity.DailyEnergyData;
 import networklab.smartapp.domain.device.service.DeviceInfoService;
 import networklab.smartapp.domain.device.service.DeviceService;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import networklab.smartapp.domain.device.service.ExcelService;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +33,7 @@ public class DeviceController {
 
     private final DeviceService deviceService;
     private final DeviceInfoService deviceInfoService;
+    private final ExcelService excelService;
 
     @GetMapping
     public String getMainPage(
@@ -60,13 +55,7 @@ public class DeviceController {
             Model model
     ) {
         SmartPlugDetailDto smartPlugDetailDto = deviceInfoService.getDeviceEnergyConsumptionStatus(userDetails.getPat(), deviceId);
-        Device device = deviceService.findDeviceEntityWithDailyEnergyData(deviceId);
-        List<EnergyDataDto> energyDataDtoList = device.getDailyEnergyDataSet()
-                        .stream()
-                        .sorted(Comparator.comparing(DailyEnergyData::getRegDate))
-                        .limit(14)
-                        .map(EnergyDataDto::dataToDto)
-                        .collect(Collectors.toList());
+        List<EnergyDataDto> energyDataDtoList = deviceService.findDailyEnergyData(deviceId);
 
         model.addAttribute("plugDetail", smartPlugDetailDto);
         model.addAttribute("energyDataDtoList", energyDataDtoList);
@@ -74,40 +63,31 @@ public class DeviceController {
         return "smart-plug";
     }
 
-    @GetMapping("/excel/{deviceId}")
+    /*
+    * DeviceId가 고유 Id가 아닌듯...
+    * 중간에 바뀐 것으로 보이는데 확인이 필요함
+    * */
+
+    @GetMapping("/excel/{deviceId}/{dateString}")
     public ResponseEntity<String> getExcelfile(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable(value = "deviceId") String deviceId,
+            @PathVariable(value = "dateString") String dateString,
             HttpServletRequest request,
             HttpServletResponse response
     )
             throws IOException {
 
-        // get Device
-        Device device = deviceService.findById(deviceId);
-
+        // request date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime requestDate = LocalDateTime.parse(dateString, formatter).withMinute(0); // 0분으로 초기화
 
         // new workbook
-        SXSSFWorkbook workbook = new SXSSFWorkbook();
-        CreationHelper createHelper = workbook.getCreationHelper();
-        Sheet sheet = workbook.createSheet("test sheet");
-
-        // Create a row and put some cells in it. Rows are 0 based.
-        Row row = sheet.createRow(0);
-        // Create a cell and put a value in it.
-//        Cell cell = row.createCell(0);
-//        cell.setCellValue("test");
-        // or do it one line
-         row.createCell(0).setCellValue("date");
-         row.createCell(1).setCellValue("time");
-         row.createCell(2).setCellValue("kWh");
-         row.createCell(3).setCellValue("device-type");
+        SXSSFWorkbook workbook = excelService.createExcelFile(deviceId, requestDate);
 
         // 파일명 설정
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String time = simpleDateFormat.format(date);
-        String fileName = "파일명" + "_" + time + ".xlsx";
+        LocalDateTime now = LocalDateTime.now();
+        String fileName = "파일명" + "_" + now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")) + ".xlsx";
 
         // 브라우저 얻기
         String browser = request.getHeader("User-Agent");

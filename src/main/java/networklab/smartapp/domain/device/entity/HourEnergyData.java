@@ -1,5 +1,6 @@
 package networklab.smartapp.domain.device.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,12 +32,9 @@ public class HourEnergyData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @Exclude
-    private Device device;
+    private String deviceId;
 
-    @Temporal(TemporalType.DATE)
-    private Date regDate;
+    private LocalDateTime regDate;
 
     Double energyConsumption;
 }

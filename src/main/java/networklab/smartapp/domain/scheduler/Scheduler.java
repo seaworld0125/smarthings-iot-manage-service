@@ -1,9 +1,6 @@
 package networklab.smartapp.domain.scheduler;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import networklab.smartapp.domain.device.dto.DeviceListDto.DeviceInfo;
 import networklab.smartapp.domain.device.dto.SmartPlugDetailDto;
 import networklab.smartapp.domain.device.entity.DailyEnergyData;
-import networklab.smartapp.domain.device.entity.Device;
 import networklab.smartapp.domain.device.entity.HourEnergyData;
 import networklab.smartapp.domain.device.repository.DailyEnergyDataRepository;
 import networklab.smartapp.domain.device.repository.HourEnergyDataRepository;
@@ -36,48 +32,7 @@ public class Scheduler {
     private final DailyEnergyDataRepository dailyEnergyDataRepository;
     private final HourEnergyDataRepository hourEnergyDataRepository;
 
-    @Scheduled(cron = "0 0 0/1 * * *")
-    public void scheduleSaveDailyData() {
-
-        List<Member> members = memberRepository.findAll();
-        for (var member : members) {
-            List<DeviceInfo> deviceInfos = deviceInfoService.getDeviceList(member.getPAT());
-
-            for (var deviceInfo : deviceInfos) {
-                SmartPlugDetailDto detailDto = deviceInfoService.getDeviceEnergyConsumptionStatus(member.getPAT(), deviceInfo.getDeviceId());
-                Device device = deviceService.findDeviceEntityWithHourEnergyData(deviceInfo.getDeviceId());
-
-                Double consumption = Double.valueOf(detailDto.getDailyConsumption()
-                        .substring(0, detailDto.getDailyConsumption().length() - 4)
-                );
-
-                Optional<HourEnergyData> opt = device.getHourEnergyDataSet().stream()
-                        .max(Comparator.comparing(HourEnergyData::getRegDate));
-
-                if(opt.isPresent()) {
-                    HourEnergyData lastEnergyData = opt.get();
-                    LocalDateTime lastDate = LocalDateTime.ofInstant(lastEnergyData.getRegDate().toInstant(), ZoneId.systemDefault());
-                    LocalDateTime now = LocalDateTime.now();
-
-                    if(lastDate.getDayOfMonth() == now.getDayOfMonth()
-                            && lastDate.getMonthValue() == now.getMonthValue()
-                            && lastDate.getYear() == now.getYear()
-                    ) {
-                        consumption -= lastEnergyData.getEnergyConsumption();
-                    }
-                }
-
-                hourEnergyDataRepository.save(HourEnergyData.builder()
-                        .device(device)
-                        .regDate(new Date())
-                        .energyConsumption(consumption)
-                        .build()
-                );
-            }
-        }
-    }
-
-    @Scheduled(cron = "0 0 0/24 * * *")
+    @Scheduled(cron = "0 0 0/1 * * *", zone = "Asia/Seoul")
     public void scheduleSaveHourData() {
 
         List<Member> members = memberRepository.findAll();
@@ -86,15 +41,48 @@ public class Scheduler {
 
             for (var deviceInfo : deviceInfos) {
                 SmartPlugDetailDto detailDto = deviceInfoService.getDeviceEnergyConsumptionStatus(member.getPAT(), deviceInfo.getDeviceId());
-                Device device = deviceService.findDeviceEntityWithHourEnergyData(deviceInfo.getDeviceId());
 
                 Double consumption = Double.valueOf(detailDto.getDailyConsumption()
                         .substring(0, detailDto.getDailyConsumption().length() - 4)
                 );
 
+                LocalDateTime now = LocalDateTime.now().withMinute(0);
+                LocalDateTime lastDate = now.minusHours(1);
+
+                Optional<HourEnergyData> opt = hourEnergyDataRepository.findLast(deviceInfo.getDeviceId(), lastDate);
+                if(opt.isPresent()) {
+                    HourEnergyData lastEnergyData = opt.get();
+                    consumption -= lastEnergyData.getEnergyConsumption();
+                }
+                hourEnergyDataRepository.save(HourEnergyData.builder()
+                        .deviceId(deviceInfo.getDeviceId())
+                        .regDate(now)
+                        .energyConsumption(consumption)
+                        .build()
+                );
+            }
+        }
+    }
+
+    @Scheduled(cron = "0 0 0/24 * * *", zone = "Asia/Seoul")
+    public void scheduleSaveDailyData() {
+
+        List<Member> members = memberRepository.findAll();
+        for (var member : members) {
+            List<DeviceInfo> deviceInfos = deviceInfoService.getDeviceList(member.getPAT());
+
+            for (var deviceInfo : deviceInfos) {
+                SmartPlugDetailDto detailDto = deviceInfoService.getDeviceEnergyConsumptionStatus(member.getPAT(), deviceInfo.getDeviceId());
+
+                Double consumption = Double.valueOf(detailDto.getDailyConsumption()
+                        .substring(0, detailDto.getDailyConsumption().length() - 4)
+                );
+
+                LocalDateTime dateTime = LocalDateTime.now().withHour(0).withMinute(0);
+
                 dailyEnergyDataRepository.save(DailyEnergyData.builder()
-                        .device(device)
-                        .regDate(new Date())
+                        .deviceId(deviceInfo.getDeviceId())
+                        .regDate(dateTime)
                         .energyConsumption(consumption)
                         .build()
                 );

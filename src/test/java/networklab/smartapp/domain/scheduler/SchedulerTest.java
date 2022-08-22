@@ -1,6 +1,7 @@
 package networklab.smartapp.domain.scheduler;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -25,7 +26,7 @@ class SchedulerTest {
         final int SET_SIZE = 10;
         Set<DailyEnergyData> testSet = new HashSet<>();
         for (int i = 0; i < SET_SIZE; i++) {
-            testSet.add(DailyEnergyData.builder().regDate(new Date(i, i, i)).energyConsumption((double) i).build());
+            testSet.add(DailyEnergyData.builder().regDate(LocalDateTime.of(i, i, i, 0, 0, 0)).energyConsumption((double) i).build());
         }
 
         Optional<DailyEnergyData> opt = testSet.stream().max(Comparator.comparing(DailyEnergyData::getRegDate));
