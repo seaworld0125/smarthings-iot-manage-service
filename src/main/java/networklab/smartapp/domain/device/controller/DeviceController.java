@@ -25,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -68,11 +69,12 @@ public class DeviceController {
     * 중간에 바뀐 것으로 보이는데 확인이 필요함
     * */
 
-    @GetMapping("/excel/{deviceId}/{dateString}")
+    @GetMapping("/excel/{deviceId}")
     public ResponseEntity<String> getExcelfile(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable(value = "deviceId") String deviceId,
-            @PathVariable(value = "dateString") String dateString,
+            @RequestParam(value = "startDate") String startDate,
+            @RequestParam(value = "endDate") String endDate,
             HttpServletRequest request,
             HttpServletResponse response
     )
@@ -80,10 +82,11 @@ public class DeviceController {
 
         // request date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDateTime requestDate = LocalDateTime.parse(dateString, formatter).withMinute(0); // 0분으로 초기화
+        LocalDateTime requestStartDate = LocalDateTime.parse(startDate, formatter).withMinute(0); // 0분으로 초기화
+        LocalDateTime requestEndDate = LocalDateTime.parse(endDate, formatter).withMinute(0); // 0분으로 초기화
 
         // new workbook
-        SXSSFWorkbook workbook = excelService.createExcelFile(deviceId, requestDate);
+        SXSSFWorkbook workbook = excelService.createExcelFile(deviceId, requestStartDate, requestEndDate);
 
         // 파일명 설정
         LocalDateTime now = LocalDateTime.now();

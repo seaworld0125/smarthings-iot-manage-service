@@ -9,64 +9,98 @@
     <link rel="stylesheet" type="text/css" href="/css/main-switch.css">
     <link rel="stylesheet" type="text/css" href="/css/layout.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- loading spinner -->
+    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+    <style>
+        .spinner-container {
+            width: auto;
+            height: auto;
+            float: right;
+            margin-right: 10px;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+    </style>
+
+    <!-- axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Main Page</title>
 </head>
 <body>
-    <script th:inline="javascript">
-        /* <![CDATA[ */
-            onOffFunction = function (switchValue, deviceId) {
-                var reqUrl = `https://api.smartthings.com/v1/devices/${deviceId}/commands`;
-                var headers = {
-                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
-                    'Authorization' : 'Bearer ' + /*[[${pat}]]*/ "",
-                }
-                var data = {
-                    "commands" : [{"capability":"switch","command": (switchValue === "on" ? "off" : "on")}]
-                };
-                axios.post(reqUrl, data, {
-                    headers: headers
-                })
-                .then((res) => {
-                    console.log("res: ", res);
-                    window.location.reload();
-                })
-            }
-        /* ]]> */
-    </script>
-    <a href="/logout">
-        <button class="material-symbols-outlined logout-icon">
-            logout
-        </button>
+<script th:inline="javascript">
+    /* <![CDATA[ */
+    onOffFunction = function (deviceId) {
+        var reqUrl = `https://api.smartthings.com/v1/devices/${deviceId}/commands`;
+        var headers = {
+            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Authorization' : 'Bearer ' + /*[[${pat}]]*/ "",
+        }
+        var switchValue = document.getElementById("device-status").innerHTML;
+        var data = {"commands" : [{"capability":"switch","command": (switchValue === "on" ? "off" : "on")}]};
+
+        var spinnerContainer = document.getElementById("spinner-container");
+
+        axios.interceptors.request.use(function (config) {
+            spinnerContainer.style.display = "block"
+            return config;
+        }, function (error) {
+            spinnerContainer.style.display = "block"
+            return Promise.reject(error);
+        });
+        axios.interceptors.response.use(function (response) {
+            spinnerContainer.style.display = "none"
+            return response;
+        }, function (error) {
+            spinnerContainer.style.display = "none"
+            return Promise.reject(error);
+        });
+        axios.post(reqUrl, data, {
+            headers: headers
+        })
+            .then((res) => {
+                console.log("res: ", res);
+                document.getElementById("device-status").innerHTML = (switchValue === "on" ? "off" : "on");
+            });
+    }
+    /* ]]> */
+</script>
+<a href="/logout">
+    <button class="material-symbols-outlined logout-icon">
+        logout
+    </button>
+</a>
+<div id="spinner-container" class="spinner-container">
+    <i class="fas fa-spinner fa-2x fa-spin"></i>
+</div>
+<div class="title">
+    <p>장치 목록 페이지</p>
+</div>
+<select name="devices" class="device-select">
+    <option value="">표시할 장치 종류 선택</option>
+    <option value="all">전체 목록</option>
+    <option value="plug">플러그 목록</option>
+</select>
+<div class="device-status-box" th:each="device : ${deviceList}">
+    <div class="device-control-box">
+        <div class="material-symbols-outlined plug-icon">
+            outlet
+        </div>
+        <div class="device-control" th:attr="onclick=|onOffFunction('${device.getDeviceId()}')|">
+            <div class="material-symbols-outlined power-icon">
+                power_rounded
+            </div>
+        </div>
+    </div>
+    <div class="device-info-box">
+        <div class="device-label" id="device-name" th:text="${device.getLabel()}">라벨</div>
+        <div class="device-power" id="device-status" th:text="${device.getSwitchValue()}">켜짐/꺼짐</div>
+    </div>
+    <a th:href="@{/main/detail/{deviceId}(deviceId = ${device.getDeviceId()})}">
+        <div class="material-symbols-outlined info-icon">
+            info
+        </div>
     </a>
-    <div class="title">
-        <p>장치 목록 페이지</p>
-    </div>
-    <select name="devices" class="device-select">
-        <option value="">표시할 장치 종류 선택</option>
-        <option value="all">전체 목록</option>
-        <option value="plug">플러그 목록</option>
-    </select>
-    <div class="device-status-box" th:each="device : ${deviceList}">
-        <div class="device-control-box">
-            <div class="material-symbols-outlined plug-icon">
-                outlet
-            </div>
-            <div class="device-control" th:attr="onclick=|onOffFunction('${device.getSwitchValue()}', '${device.getDeviceId()}')|">
-                <div class="material-symbols-outlined power-icon">
-                    power_rounded
-                </div>
-            </div>
-        </div>
-        <div class="device-info-box">
-            <div class="device-label" id="device-name" th:text="${device.getLabel()}">라벨</div>
-            <div class="device-power" th:text="${device.getSwitchValue()}">켜짐/꺼짐</div>
-        </div>
-        <a th:href="@{/main/detail/{deviceId}(deviceId = ${device.getDeviceId()})}">
-            <div class="material-symbols-outlined info-icon">
-                info
-            </div>
-        </a>
-    </div>
+</div>
 </body>
 </html>

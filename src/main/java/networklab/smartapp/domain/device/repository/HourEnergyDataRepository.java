@@ -14,8 +14,12 @@ import java.util.stream.Stream;
  */
 public interface HourEnergyDataRepository extends JpaRepository<HourEnergyData, Long> {
 
-    @Query("select h from HourEnergyData h where h.deviceId = :deviceId and h.regDate >= :date order by h.regDate desc")
-    Stream<HourEnergyData> findAllByDeviceIdAndDateUsingStream(@Param("deviceId") String deviceId, @Param("date") LocalDateTime date);
+    @Query("select h from HourEnergyData h " +
+            "where h.deviceId = :deviceId " +
+            "and h.regDate >= :startDate " +
+            "and h.regDate <= :endDate " +
+            "order by h.regDate desc")
+    Stream<HourEnergyData> findAllByDeviceIdAndDateUsingStream(@Param("deviceId") String deviceId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     @Query("select h from HourEnergyData h where h.deviceId = :deviceId and h.regDate = :date")
     Optional<HourEnergyData> findLast(@Param("deviceId") String deviceId, @Param("date") LocalDateTime date);

@@ -22,7 +22,7 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     @Transactional
-    public SXSSFWorkbook createExcelFile(String deviceId, LocalDateTime date) {
+    public SXSSFWorkbook createExcelFile(String deviceId, LocalDateTime startDate, LocalDateTime endDate) {
 
         // new workbook
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -37,7 +37,7 @@ public class ExcelServiceImpl implements ExcelService {
         topRow.createCell(3).setCellValue("device-type");
 
         // get db stream
-        Stream<HourEnergyData> dataStream = hourEnergyDataRepository.findAllByDeviceIdAndDateUsingStream(deviceId, date);
+        Stream<HourEnergyData> dataStream = hourEnergyDataRepository.findAllByDeviceIdAndDateUsingStream(deviceId, startDate, endDate);
 
         // add row
         AtomicInteger count = new AtomicInteger(1);

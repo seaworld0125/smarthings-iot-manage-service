@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 
 public interface ExcelService {
 
-    public SXSSFWorkbook createExcelFile(String deviceId, LocalDateTime date);
+    public SXSSFWorkbook createExcelFile(String deviceId, LocalDateTime startDate, LocalDateTime endDate);
 }
