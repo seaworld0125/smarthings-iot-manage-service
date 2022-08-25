@@ -46,7 +46,7 @@ public class Scheduler {
                         .substring(0, detailDto.getDailyConsumption().length() - 4)
                 );
 
-                LocalDateTime now = LocalDateTime.now().withMinute(0);
+                LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
                 LocalDateTime lastDate = now.minusHours(1);
 
                 Optional<HourEnergyData> opt = hourEnergyDataRepository.findLast(deviceInfo.getDeviceId(), lastDate);
@@ -78,7 +78,7 @@ public class Scheduler {
                         .substring(0, detailDto.getDailyConsumption().length() - 4)
                 );
 
-                LocalDateTime dateTime = LocalDateTime.now().withHour(0).withMinute(0);
+                LocalDateTime dateTime = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
 
                 dailyEnergyDataRepository.save(DailyEnergyData.builder()
                         .deviceId(deviceInfo.getDeviceId())
