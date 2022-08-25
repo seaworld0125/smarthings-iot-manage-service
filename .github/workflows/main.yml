@@ -66,7 +66,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./
-          file: ./backend/Dockerfile
+          file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags:  ${{ secrets.DOCKER_HUB_USERNAME }}/smart-app:latest
