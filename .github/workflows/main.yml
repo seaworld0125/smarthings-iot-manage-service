@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI to Docker Hub, CD - BackEnd
+name: CI to Docker Hub
 
 # Controls when the workflow will run
 on:
@@ -36,24 +36,12 @@ jobs:
 
       - name: gradlew 권한 수정
         run: chmod +x ./gradlew
-        
-      - name: 캐시 설정
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+            
       - name: 백엔드 Gradle 테스트
         run: ./gradlew test
 
       - name: 백엔드 Gradle 빌드
         run: ./gradlew build -x test
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
 
       - name: Docker Hub 로그인
         uses: docker/login-action@v1
@@ -62,20 +50,9 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build and push
-        id: docker_build
         uses: docker/build-push-action@v3
         with:
           context: ./
-          file: ./backend/Dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
+          file: ./Dockerfile
           push: true
           tags:  ${{ secrets.DOCKER_HUB_USERNAME }}/smart-app:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
-          
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
