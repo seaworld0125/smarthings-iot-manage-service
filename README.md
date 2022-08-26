@@ -60,19 +60,19 @@
 
 
 # Page
-## 1. Login Page
+## 1. Login Page [/auth/login]
 ![login](https://user-images.githubusercontent.com/75168305/186823881-e29931e1-7e0d-462f-8f8e-ab2d9b7200a3.JPG)
 
-## 2. Join Page
+## 2. Join Page [/auth/join]
 ![sign](https://user-images.githubusercontent.com/75168305/186823958-27bc9822-331c-44ef-9cde-b90895a60987.JPG)
 
-## 3. Main Page
+## 3. Main Page [/main]
 ![main](https://user-images.githubusercontent.com/75168305/186823903-b49186e0-e07c-478e-b9df-1175045c720d.JPG)
 
 ## 4. Main Page: On/Off your Device
 ![GifMaker_20220826134405207](https://user-images.githubusercontent.com/75168305/186824011-10be777b-401f-4314-9c42-ab61f24aeb4e.gif)
 
-## 5. Device Page
+## 5. Device Page [/main/detail/{deviceId}]
 ![device](https://user-images.githubusercontent.com/75168305/186824094-53e321a7-4b1d-4713-8347-f40c9f4ccfbc.JPG)
 
 ## 5. Device Page: Download your data to Excel file
