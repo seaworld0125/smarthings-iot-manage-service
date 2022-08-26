@@ -44,7 +44,6 @@
 
 ## 4. MySQL 최초 실행인 경우에는 smartapp_db database를 생성합니다
 > For the first run of mysql, create SmartApp_db Database
-### COMMAND
 - docker exec -it smartapp-mysql bash
 - mysql -u root -p
 - Enter password: <your root passwd>
