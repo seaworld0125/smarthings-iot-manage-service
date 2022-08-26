@@ -10,7 +10,7 @@
 - IoT 디바이스들의 일, 시간 단위 전기 사용량을 기록하여 저장함
 - 디바이스 상세 페이지에서 일일 전기 사용량 그래프를 제공함
 - 디바이스 상세 페이지에서 기간을 설정하여 시간 단위 데이터가 기록된 Excel 파일을 다운로드할 수 있음
-- Docker image를 제공하기 때문에 Docker 환경 어디에서나 홈페이지를 호스팅할 수 있음
+- Docker image를 제공하기 때문에 Docker 환경 어디에서나 이용 가능
 
 ## ENG
 - IoT device remote operation registered in SmartTHings Cloud (on/off)
