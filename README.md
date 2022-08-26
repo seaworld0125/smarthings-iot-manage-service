@@ -6,14 +6,14 @@
 
 # Function
 ## KOR
-- 디바이스 조작 가능 (on/off)
+- SmarThings Cloud에 등록된 IoT 디바이스 원격 조작 가능 (on/off)
 - IoT 디바이스들의 일, 시간 단위 전기 사용량을 기록하여 저장함
 - 디바이스 상세 페이지에서 일일 전기 사용량 그래프를 제공함
 - 디바이스 상세 페이지에서 기간을 설정하여 시간 단위 데이터가 기록된 Excel 파일을 다운로드할 수 있음
 - Docker image를 제공하기 때문에 Docker 환경 어디에서나 홈페이지를 호스팅할 수 있음
 
 ## ENG
-- Control your IoT device (on/off)
+- IoT device remote operation registered in SmartTHings Cloud (on/off)
 - Measure and store the power usage of IoT devices on a daily, hourly basis
 - Provides a daily units of electricity consumption graph on the device detail page
 - By setting the period on the device detail page, you can download the Excel file recorded with time unit data
